@@ -1,6 +1,6 @@
 # Udacity Project - Image Classifier
 
-My final project submission for the Udacity AI Programming with Python Nanodegree, Image Classifier.
+My submission for the Udacity AI Programming with Python Nanodegree, Image Classifier project.
 
 
 ### Installation
