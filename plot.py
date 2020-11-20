@@ -40,12 +40,14 @@ def plot_image(image, ax=None):
 
     return ax
 
-def plot_image_prediction(image, ps_values, ps_classes, ps_labels):
+def plot_image_prediction(image, ps_values, ps_classes, ps_labels, figure=None, title='Image'):
     ''' Function for viewing an image and it's predicted classes.
     '''
 
-    fig, (ax1, ax2) = plt.subplots(figsize=(6,3), ncols=2)
+    fig, (ax1, ax2) = plt.subplots(figsize=(8,3), ncols=2)
+
     plot_image(image, ax1)
+    ax1.set_title(title)
     ax2.barh(np.arange(len(ps_values)), ps_values)
     ax2.set_aspect(0.1)
     ax2.set_yticks(np.arange(5))
