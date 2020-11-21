@@ -87,3 +87,24 @@ class Model():
 
     def eval(self):
         self.model.eval()
+
+    def predict(self, image, topk=5):
+        ''' Predict the class (or classes) of an image using a trained deep learning model.
+        '''
+        idx_to_class = dict(zip(self.class_to_idx.values(),self.class_to_idx.keys()))
+
+        with torch.no_grad():
+            # TODO: Implement the code to predict the class from an image file
+
+            self.eval()
+            image = torch.Tensor(image.unsqueeze(0)).to(self.device)
+
+            log_probs = self.forward(image).cpu()
+            probs = torch.exp(log_probs)
+
+            # top predictions
+            top_probs, top_class = probs.topk(topk, dim=1)
+            top_class = [idx_to_class[i.item()] for i in top_class.flatten()]
+            top_probs = top_probs.flatten()
+
+            return (top_probs.numpy().tolist(), top_class)

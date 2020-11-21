@@ -1,6 +1,7 @@
 from torchvision import datasets, transforms
 import torch
 import json
+from PIL import Image
 
 class ModelDataLoader():
 
@@ -50,7 +51,16 @@ class ModelDataLoader():
         return (test_dataloader, test_dataloader)
 
     def get_label_dict(self, filename):
-        with open('cat_to_name.json', 'r') as f:
+        with open(filename, 'r') as f:
             cat_to_name = json.load(f)
 
         return cat_to_name
+
+    def process_image(self, filename):
+        ''' Scales, crops, and normalizes a PIL image for a PyTorch model,
+            returns an Numpy array
+        '''
+        # TODO: Process a PIL image for use in a PyTorch model
+
+        image = Image.open(filename)
+        return self.test_transform(image)

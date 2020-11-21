@@ -20,7 +20,7 @@ def get_input_args():
     parser.add_argument('--dropout_1', type=float, default=0.2, help="Hidden layer 1 dropout rate")
     parser.add_argument('--dropout_2', type=float, default=0.2, help="Hidden layer 2 dropout rate")
     parser.add_argument('--gpu', type=str2bool, default=True, help="Model use GPU (requires CUDA support)")
-    parser.add_argument('--labels_file', type=str, default='cat_to_name.json', help="Labels json file to use")
+    parser.add_argument('--category_names', type=str, default='cat_to_name.json', help="Labels json file to use")
     parser.add_argument('--epochs', type=int, default=20, help="Epochs to train")
 
     return parser.parse_args()
@@ -37,7 +37,7 @@ def main():
     print()
 
     dataloader = ModelDataLoader(in_arg.data_dir)
-    labels = dataloader.get_label_dict(in_arg.labels_file)
+    labels = dataloader.get_label_dict(in_arg.category_names)
     train_dataset, train_dataloader = dataloader.get_train_data()
     valid_dataset, valid_dataloader = dataloader.get_validation_data()
     test_dataset, test_dataloader = dataloader.get_test_data()
