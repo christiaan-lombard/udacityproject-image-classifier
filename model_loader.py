@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+#
+# PROGRAMMER: Christiaan Lombard
+# DATE CREATED: 2020-11-21
+# REVISED DATE: 2020-11-21
+# PURPOSE: Define model checkpoint loader
+#
+#
+
 
 from model import Model
 import torch
@@ -6,10 +15,26 @@ from model_trainer import ModelTrainer
 
 
 class ModelLoader:
+    """Loads and saves model checkpoints
+    """
+
     def __init__(self, directory):
+        """Create instance of model loader
+
+        Args:
+            directory (str): Directory of checkpoints
+        """
         self.directory = directory
 
     def save_checkpoint(self, name, model, trainer):
+        """Save model checkpoint
+
+        Args:
+            name (str): Name of checkpoint
+            model (Model): Model to save
+            trainer (ModelTrainer): Model trainer (to extract optimizer parameters)
+        """
+
         checkpoint = {
             'name': name,
             'arch': model.arch,
@@ -26,7 +51,17 @@ class ModelLoader:
         }
         torch.save(checkpoint, self.get_checkpoint_path(name))
 
-    def load_checkpoint(self, name, with_trainer = True, model_use_gpu=True):
+    def load_checkpoint(self, name, with_trainer=True, model_use_gpu=True):
+        """Load model checkpoint and setup the Model and ModelTrainer
+
+        Args:
+            name (str): Checkpoint name
+            with_trainer (bool, optional): Whether to load the ModelTrainer. Defaults to True.
+            model_use_gpu (bool, optional): Setup the Model with GPU enabled. Defaults to True.
+
+        Returns:
+            (Model, ModelTrainer): Returns model and trainer
+        """
         checkpoint = torch.load(self.get_checkpoint_path(name))
 
         # recover model state
@@ -53,9 +88,24 @@ class ModelLoader:
         else:
             return model
 
-
     def get_checkpoint_path(self, name):
+        """Get the filepath of a given checkpoint name
+
+        Args:
+            name (str): Checkpoint name
+
+        Returns:
+            str: Path
+        """
         return self.directory + '/' + name + '.pth'
 
     def checkpoint_exists(self, name):
+        """Check if a checkpoint file exists
+
+        Args:
+            name (str): Checkpoint name
+
+        Returns:
+            bool: Whether the checkpoint file exists
+        """
         return path.exists(self.get_checkpoint_path(name))

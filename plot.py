@@ -1,8 +1,28 @@
+#!/usr/bin/env python3
+#
+# PROGRAMMER: Christiaan Lombard
+# DATE CREATED: 2020-11-21
+# REVISED DATE: 2020-11-21
+# PURPOSE: Helper functions for plotting images
+#
+#
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_image_grid(images, ncols = 4, nrows = 1):
-    """Plot images (as tensors) in a grid"""
+
+def plot_image_grid(images, ncols=4, nrows=1):
+    """Plot images (as tensors) in a grid
+
+    Args:
+        images (Tensor[]): List of Tensors
+        ncols (int, optional): Defaults to 4.
+        nrows (int, optional): Defaults to 1.
+
+    Returns:
+        Axis: Plotted Axis
+    """
     fig, axes = plt.subplots(nrows, ncols)
 
     for r in range(nrows):
@@ -11,8 +31,18 @@ def plot_image_grid(images, ncols = 4, nrows = 1):
             plot_image(image, axes[r][c])
     return axes
 
+
 def plot_image(image, ax=None):
-    """Imshow for Tensor."""
+    """Plot image from Tensor
+
+    Args:
+        image (Tensor): Image tensor as DataLoader provides
+        ax (Axis, optional): Axis to plot to. Defaults to None.
+
+    Returns:
+        Axis: The plotted Axis
+    """
+
     if ax is None:
         fig, ax = plt.subplots()
 
@@ -40,11 +70,20 @@ def plot_image(image, ax=None):
 
     return ax
 
-def plot_image_prediction(image, ps_values, ps_classes, ps_labels, figure=None, title='Image'):
-    ''' Function for viewing an image and it's predicted classes.
-    '''
 
-    fig, (ax1, ax2) = plt.subplots(figsize=(8,3), ncols=2)
+def plot_image_prediction(image, ps_values, ps_classes, ps_labels, title='Image'):
+    """Plot Image and Prediction Chart
+
+    Args:
+        image (Tensor): Image Tensor
+        ps_values (list): Predicted values
+        ps_classes (list): Predicted class values
+        ps_labels (list): Predicted class names
+        figure ([type], optional): [description]. Defaults to None.
+        title (str, optional): Image title. Defaults to 'Image'.
+    """
+
+    fig, (ax1, ax2) = plt.subplots(figsize=(8, 3), ncols=2)
 
     plot_image(image, ax1)
     ax1.set_title(title)

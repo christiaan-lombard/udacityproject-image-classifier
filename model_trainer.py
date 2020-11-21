@@ -1,11 +1,31 @@
+#!/usr/bin/env python3
+#
+# PROGRAMMER: Christiaan Lombard
+# DATE CREATED: 2020-11-21
+# REVISED DATE: 2020-11-21
+# PURPOSE: Define model training strategy
+#
+#
+
+
 import torch
 from torch import nn, optim
 import time
 import numpy as np
 
+
 class ModelTrainer():
+    """Defines training strategy for a Model
+    """
 
     def __init__(self, model, learning_rate=0.001):
+        """Create a trainer instance
+
+        Args:
+            model (Model): The model to train
+            learning_rate (float, optional): Learing rate passed to optimizer. Defaults to 0.001.
+        """
+
         self.learning_rate = learning_rate
         self.model = model
         self.trained_epochs = 0
@@ -15,13 +35,21 @@ class ModelTrainer():
 
         # define optimizer
         self.optimizer = optim.Adam(
-                self.model.classifier.parameters(),
-                lr=self.learning_rate
-            )
-
+            self.model.classifier.parameters(),
+            lr=self.learning_rate
+        )
 
     def train_epochs(self, num_epochs, train_dataloader, valid_dataloader):
+        """Epoch generator. Runs a number of taining epochs and returns the results for each.
 
+        Args:
+            num_epochs (int): Number of epochs to run
+            train_dataloader (DataLoader): Training dataloader
+            valid_dataloader (DataLoader): Validation dataloader
+
+        Yields:
+            dict: Dictionary of results
+        """
 
         for e in range(num_epochs):
             train_loss = 0
@@ -53,6 +81,14 @@ class ModelTrainer():
             }
 
     def test(self, test_dataloader):
+        """Validate model against test data
+
+        Args:
+            test_dataloader (DataLoader): Test dataloader
+
+        Returns:
+            dict: Results
+        """
 
         test_loss = 0
         accuracies = []
@@ -72,8 +108,16 @@ class ModelTrainer():
             'duration': time.time() - start
         }
 
-
     def train(self, images, labels):
+        """Single iteration of training on a batch of images
+
+        Args:
+            images (Tensor): Batch of images
+            labels (Tensor): Associated classes
+
+        Returns:
+            float: Calculated loss
+        """
 
         # training mode
         self.model.train()
@@ -94,6 +138,15 @@ class ModelTrainer():
         return loss.item()
 
     def validate(self, images, labels):
+        """Single iteration of validation on a batch of images
+
+        Args:
+            images (Tensor): Batch of images
+            labels (Tensor): Associated classes
+
+        Returns:
+            (float, float): Calculated loss and mean accuracy
+        """
 
         # eval mode
         self.model.eval()
@@ -113,7 +166,3 @@ class ModelTrainer():
         accuracy = torch.mean(equals.type(torch.FloatTensor))
 
         return (loss.item(), accuracy.item())
-
-    def get_learning_rate(self):
-        for param_group in self.optimizer.param_groups:
-            return param_group['lr']
